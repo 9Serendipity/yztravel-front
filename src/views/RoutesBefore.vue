@@ -217,7 +217,11 @@ export default {
                     this.map.add(routeLine)
                     this.currentRoute = routeLine
                     this.map.setFitView([routeLine])
-                    this.$message.success('路线规划成功')
+                    this.$message({
+                        message: '路线规划成功',
+                        type: 'success',
+                        duration: 1000  // 1秒后自动关闭
+                    })
                 }
             } catch (error) {
                 console.error('路线规划失败：', error)

@@ -159,6 +159,7 @@ export default {
             console.error('获取景点信息失败:', error)
             this.$message.error('获取景点信息失败')
         }
+        
     },
     methods: {
         // 添加获取经纬度的方法
@@ -182,22 +183,37 @@ export default {
 
         switchView(view) {
             this.activeView = view
-            if (view === 'details' && this.selectedSpot) {
-                // 如果切换到详情视图，销毁地图实例
-                if (this.map) {
-                    this.map.destroy()
-                    this.map = null
-                }
+            if (view === 'details') {
+
                 console.log('加载景点详情:', this.selectedSpot.attractionName)
             }
             else if (view === 'route') {
-                // 再初始化地图
-                this.initMap()
+                // 确保在初始化新地图前清除旧实例
+
+                // 初始化地图
+                this.$nextTick(() => {
+                    this.initMap()
+                })
             }
         },
 
         async initMap() {
             try {
+                // 检查容器是否存在
+                const container = document.getElementById('container')
+                if (!container) {
+                    console.error('地图容器不存在')
+                    return
+                }
+
+                // 检查地图实例
+                if (this.map) {
+                    console.log('地图实例已存在，销毁旧实例')
+                    this.map.destroy()
+                    this.map = null
+                }
+
+                console.log('开始加载高德地图 JS API...')
                 const AMap = await AMapLoader.load({
                     key: this.jsApiKey,
                     version: '2.0',
@@ -207,6 +223,7 @@ export default {
                     }
                 })
 
+                console.log('高德地图 JS API 加载成功，开始初始化地图...')
                 window.AMap = AMap
                 console.log('地图加载成功')
 
@@ -215,6 +232,7 @@ export default {
                     center: [119.421003, 32.393159]
                 })
 
+                console.log('地图实例创建成功，开始添加控件...')
                 // 添加定位插件
                 const geolocation = new AMap.Geolocation({
                     // 启用高精度定位模式，会使用GPS等更精确的定位方式
@@ -402,8 +420,12 @@ export default {
                     this.currentRoute = routeLine
                     // 调整地图视野，确保路线完整显示在可视区域内
                     this.map.setFitView([routeLine])
-                    // 显示成功提示
-                    this.$message.success('路线规划成功')
+                    // 显示成功提示，设置为 2 秒
+                    this.$message({
+                        message: '路线规划成功',
+                        type: 'success',
+                        duration: 1000  // 1秒后自动关闭
+                    })
                 } else {
                     throw new Error(data.info || '路线规划失败')
                 }

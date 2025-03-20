@@ -6,6 +6,8 @@ import RecommendSpots from '@/views/RecommendSpots.vue'
 import Routes from '@/views/Routes.vue'
 import RoutesBefore from '@/views/RoutesBefore.vue'
 import AccountManage from '@/views/AccountManage.vue'
+import FoodPage from '@/views/Food.vue'  // 修改导入名称
+import FoodNavigation from '@/views/FoodNavigation.vue'  // 添加新组件导入
 
 // 解决重复导航的问题
 const originalPush = VueRouter.prototype.push
@@ -56,7 +58,18 @@ const routes = [
     component: RoutesBefore,
     meta: { requiresAuth: true }
   },
-
+  {
+    path: '/food',
+    name: 'FoodPage',    // 修改路由名称
+    component: FoodPage, // 修改组件引用
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/food/navigation',
+    name: 'FoodNavigation',
+    component: FoodNavigation,
+    meta: { requiresAuth: true }
+  }
 ]
 
 const router = new VueRouter({

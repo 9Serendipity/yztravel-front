@@ -12,7 +12,7 @@
       <!-- 用户偏好选择区域 -->
       <el-card class="preference-card">
         <div class="preference-form">
-          <h3>个性化推荐</h3>
+          <h3>景点推荐</h3>
           <el-form :model="userPreference" label-width="100px">
             <!-- 景点类型偏好 -->
             <el-form-item label="景点类型">
