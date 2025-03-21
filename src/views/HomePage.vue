@@ -9,10 +9,10 @@
         <el-menu-item index="/account">账号</el-menu-item>
       </el-menu>
 
-      <!-- 替换原来的 el-main，改为四个内容区域 -->
       <el-main>
         <div class="box">
           <div class="banner">
+            <!-- 轮播图部分 -->
             <el-row v-for="(section, index) in sections" :key="index" :class="['content-section', section.class]">
               <el-col :span="24">
                 <div class="section-container"> <!-- v-for循环渲染下面四个区域 -->
@@ -33,14 +33,21 @@
             </el-row>
           </div>
         </div>
+        <!-- 使用 HotSpots 组件替换原来的热门景点列表 -->
+        <hot-spots></hot-spots>
       </el-main>
     </el-container>
   </div>
 </template>
 
 <script>
+import HotSpots from '@/components/HotSpots.vue'
+
 export default {
   name: 'HomePage',
+  components: {
+    HotSpots
+  },
 
   data() {
     // 保持数据不变
@@ -48,9 +55,6 @@ export default {
       activeIndex: '/home',  // 修改初始值为当前路由路径
       sections: [
         { title: '景点图片展示区域', class: 'scenic-spots' },
-        { title: '智能推荐区域', class: 'smart-recommend' },
-        { title: '特色美食区域', class: 'special-food' },
-        { title: '用户互动区域', class: 'user-interaction' }
       ],
       carouselImages: [
         { id: 1, url: require('@/assets/大明寺（首页）.png'), title: '大明寺' },
@@ -96,14 +100,28 @@ export default {
 
 .box {
   position: relative;
+  margin-bottom: 40px;  /* 添加底部间距 */
 }
 
 .banner {
-  z-index: 999;
-  position: absolute;
-  top: 300%;
-  left: 10%;
+  position: relative;  /* 改为相对定位 */
+  width: 80%;  /* 设置宽度 */
+  margin: 0 auto;  /* 居中显示 */
   color: #967171;
+}
+
+/* 添加热门景点样式 */
+.hot-spots-section {
+  margin-top: 40px;  /* 与轮播图保持距离 */
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.hot-spots-container {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
 }
 
 /* 菜单样式 */
@@ -195,18 +213,6 @@ export default {
 /* 各区域特定样式 */
 .scenic-spots .section-container {
   background-color: transparent;
-}
-
-.smart-recommend .section-container {
-  background-color: #f8f8f8;
-}
-
-.special-food .section-container {
-  background-color: #f6f6f6;
-}
-
-.user-interaction .section-container {
-  background-color: #f8f8f8;
 }
 
 /* 添加点击时的样式 */

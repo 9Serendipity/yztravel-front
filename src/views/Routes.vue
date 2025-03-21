@@ -152,6 +152,11 @@ export default {
                 }
             }
 
+            // 处理查询参数
+            if (this.$route.query.view) {
+                this.activeView = this.$route.query.view
+            }
+
             if (this.activeView === 'route') {
                 this.initMap()
             }
