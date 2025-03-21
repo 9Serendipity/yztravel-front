@@ -44,8 +44,7 @@
 </template>
 
 <script>
-/* global AMap */
-import AMapLoader from '@amap/amap-jsapi-loader'
+import MapService from '@/services/MapService'
 
 export default {
   name: 'FoodNavigation',
@@ -123,14 +122,7 @@ export default {
 
     async initMap() {
       try {
-        const AMap = await AMapLoader.load({
-          key: this.jsApiKey,
-          version: '2.0',
-          plugins: ['AMap.Geolocation'],
-          security: {
-            securityCode: '5c14642302a2398d4796c6a2509d2c6f'
-          }
-        })
+        const AMap = await MapService.initAMap()
 
         this.map = new AMap.Map('container', {
           zoom: 11,

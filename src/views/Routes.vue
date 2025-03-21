@@ -188,7 +188,7 @@ export default {
                 console.log('加载景点详情:', this.selectedSpot.attractionName)
             }
             else if (view === 'route') {
-                // 确保在初始化新地图前清除旧实例
+
 
                 // 初始化地图
                 this.$nextTick(() => {

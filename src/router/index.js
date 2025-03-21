@@ -68,6 +68,14 @@ const routes = [
     path: '/food/navigation',
     name: 'FoodNavigation',
     component: FoodNavigation,
+    props: (route) => ({
+        startLat: route.query.startLat,
+        startLng: route.query.startLng,
+        endLat: route.query.endLat,
+        endLng: route.query.endLng,
+        endName: route.query.endName,
+        endAddress: route.query.endAddress
+    }),
     meta: { requiresAuth: true }
   }
 ]
