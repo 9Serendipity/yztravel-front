@@ -19,10 +19,18 @@
               <span class="spot-name" :class="{ 'clickable': true }">{{ scope.row.name }}</span>
             </template>
           </el-table-column>
-          <el-table-column width="120">
+          <el-table-column width="200">
             <template slot-scope="scope">
-              <el-rate v-model="scope.row.rating" disabled text-color="#ff9900">
-              </el-rate>
+              <div class="rating-container">
+                <el-rate 
+                  v-model="scope.row.rating" 
+                  :max="5"
+                  :allow-half="true"
+                  disabled 
+                  text-color="#ff9900">
+                </el-rate>
+                <span class="rating-text">{{ scope.row.rating }}分</span>
+              </div>
             </template>
           </el-table-column>
           <el-table-column width="120" align="right">
@@ -67,6 +75,10 @@ export default {
   methods: {
     async handleSpotClick(row) {
         try {
+            // 先增加访问量
+            await axios.post(`/api/spots/visit/${row.name}`)
+            
+            // 然后获取景点详情
             const response = await axios.get(`/api/spots/attractions/name/${row.name}`)
             if (response.data.code === 1) {
                 // 修改：获取数组中的第一个元素
@@ -81,12 +93,15 @@ export default {
                 localStorage.setItem('selectedSpot', JSON.stringify(spotData))
                 // 修改为路径参数方式跳转
                 this.$router.push(`/routes/${spotData.id}`)
+                
+                // 更新本地数据
+                await this.loadSpots()
             } else {
                 this.$message.error('获取景点信息失败')
             }
         } catch (error) {
-            console.error('获取景点信息失败:', error)
-            this.$message.error('获取景点信息失败')
+            console.error('操作失败:', error)
+            this.$message.error('操作失败，请稍后重试')
         }
     },
     handleSizeChange(val) {
@@ -100,6 +115,11 @@ export default {
       try {
         const response = await axios.get('/api/spots/all')
         if (response.data.code === 1) {
+          // 打印评分值，检查数据
+          console.log('景点评分数据:', response.data.data.map(spot => ({
+            name: spot.name,
+            rating: spot.rating
+          })))
           this.spots = response.data.data
         } else {
           this.$message.error('获取景点列表失败')
@@ -194,5 +214,16 @@ export default {
 .pagination-container {
   margin-top: 20px;
   text-align: center;
+}
+.rating-container {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;  /* 防止内容换行 */
+}
+
+.rating-text {
+  font-size: 12px;
+  color: #909399;
+  margin-left: 5px;
 }
 </style>
