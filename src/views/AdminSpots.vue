@@ -258,7 +258,9 @@ export default {
         // 添加提交图片的方法
         async submitImage() {
             try {
+                console.log('提交的图片数据:', this.imageForm) // 添加调试日志
                 const response = await axios.post('/api/spots/images/add', this.imageForm)
+                console.log('后端响应:', response.data) // 添加调试日志
                 if (response.data.code === 1) {
                     this.$message.success('图片添加成功')
                     this.imageDialogVisible = false
@@ -267,8 +269,8 @@ export default {
                     this.$message.error(response.data.msg || '添加失败')
                 }
             } catch (error) {
-                console.error('添加图片失败:', error)
-                this.$message.error('添加图片失败')
+                console.error('添加图片失败:', error.response?.data || error) // 修改错误日志
+                this.$message.error(error.response?.data?.msg || '添加图片失败')
             }
         }
     },
