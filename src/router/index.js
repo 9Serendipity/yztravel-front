@@ -8,6 +8,7 @@ import RoutesBefore from '@/views/RoutesBefore.vue'
 import AccountManage from '@/views/AccountManage.vue'
 import FoodPage from '@/views/Food.vue'  // 修改导入名称
 import FoodNavigation from '@/views/FoodNavigation.vue'  // 添加新组件导入
+import AdminSpots from '@/views/AdminSpots.vue'
 
 // 解决重复导航的问题
 const originalPush = VueRouter.prototype.push
@@ -77,6 +78,11 @@ const routes = [
         endAddress: route.query.endAddress
     }),
     meta: { requiresAuth: true }
+  },
+  {
+    path: '/admin',
+    name: 'AdminSpots',
+    component: AdminSpots,
   }
 ]
 
