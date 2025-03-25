@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-menu :default-active="'/admin/spots'" class="custom-menu" mode="horizontal" router>
-            <el-menu-item index="/home">首页</el-menu-item>
+            <el-menu-item index="/login">返回登录</el-menu-item>
             <el-menu-item index="/admin/spots">景点管理</el-menu-item>
         </el-menu>
 
@@ -281,17 +281,69 @@ export default {
 </script>
 
 <style scoped>
+
+/* 菜单样式 */
 .custom-menu {
-    --menu-text: #57573e;
-    --menu-hover-text: #57573e;
-    --menu-active-text: #000000;
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    width: 100%;
-    background: url('@/assets/菜单栏.jpg') !important;
-    background-size: cover !important;
-    background-position: center !important;
+  --menu-text: #57573e;
+  /* 默认文字颜色 */
+  --menu-hover-text: #57573e;
+  /* 悬停文字颜色 */
+  --menu-active-text: #000000;
+  /* 激活状态颜色 */
+  /* 开启 Flex 布局 */
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  width: 100%;
+  /* 修改背景设置 */
+  background: url('@/assets/菜单栏.jpg') !important;
+  /* 替换背景色为图片 */
+  background-size: cover !important;
+  /* 确保图片覆盖整个区域 */
+  background-position: center !important;
+  /* 图片居中显示 */
+}
+
+/* 菜单项通用样式 */
+.el-menu>.el-menu-item,
+.el-menu>.el-submenu {
+  /* 同时作用于普通菜单项和下拉菜单 */
+  flex: 1;
+  font-family: "华文中宋", "STZhongsong", sans-serif;
+  /* 修改字体 */
+  font-size: 20px;
+  /* 添加默认字体大小 */
+  max-width: 15%;
+  text-align: center;
+  transition: all 0.3s ease !important;
+  /* 添加过渡效果 */
+  background-color: transparent !important;
+  /* 移除默认背景 */
+  color: var(--menu-text) !important;
+}
+
+/* 悬停效果设置 */
+.custom-menu>.el-menu-item:hover {
+  background-color: transparent !important;
+  /* 保持背景不变 */
+  display: inline-block;
+  transform: scale(1.4);
+  /* 文字缩放 */
+  transition: transform 0.3s ease;
+  /* 缩放过渡 */
+  color: var(--menu-hover-text) !important;
+  /*移除默认颜色变化*/
+}
+
+/* 保持激活状态样式 */
+.custom-menu>.el-menu-item.is-active,
+.custom-menu>.el-submenu.is-active {
+  border-bottom: transparent !important;
+  font-size: 20px;
+  /* 添加激活时的字体大小 */
+  transform: scale(1.5);
+  /* 可选：添加整体放大效果 */
+  color: var(--menu-active-text) !important;
 }
 
 .admin-container {

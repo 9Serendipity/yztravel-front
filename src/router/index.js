@@ -80,27 +80,39 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
+    // 修改路由配置中的 admin 路由
     path: '/admin',
     name: 'AdminSpots',
     component: AdminSpots,
-  }
-]
-
+    meta: { requiresAdmin: true }
+   }, // routes 数组结束
+  ]
+// 创建路由实例
 const router = new VueRouter({
   routes
 })
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/home']
-  const authRequired = !publicPages.includes(to.path)
-  const user = localStorage.getItem('user')
+    const publicPages = ['/login', '/home']
+    const authRequired = !publicPages.includes(to.path)
+    const adminRequired = to.matched.some(record => record.meta.requiresAdmin)
+    const userStr = localStorage.getItem('user')
+    const user = userStr ? JSON.parse(userStr) : null
+    
+    // 如果用户名是 admin，直接允许访问管理页面
+    if (user?.phone === 'admin') {
+        next()
+        return
+    }
 
-  if (authRequired && !user) {
-    next('/login')
-  } else {
-    next()
-  }
+    if (adminRequired) {
+        next('/home')
+    } else if (authRequired && !user) {
+        next('/login')
+    } else {
+        next()
+    }
 })
 
 export default router

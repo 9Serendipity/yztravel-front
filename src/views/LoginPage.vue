@@ -1,3 +1,4 @@
+<!-- eslint-disable -->
 <template>
     <div class="login-container">
         <el-card class="login-box">
@@ -9,10 +10,9 @@
             <!-- 登录表单 -->
             <el-form ref="loginForm" :model="form" :rules="rules" label-width="80px" label-position="top">
                 <!-- 修改账号输入为手机号输入 -->
-                <el-form-item label="手机号" prop="phone">
-                    <el-input v-model="form.phone" placeholder="请输入手机号">
+                <el-form-item label="账号" prop="phone">
+                    <el-input v-model="form.phone" placeholder="请输入账号">
                         <i slot="prefix" class="el-icon-user"></i>
-
                     </el-input>
                 </el-form-item>
 
@@ -52,8 +52,8 @@ export default {
             },
             rules: {
                 phone: [    // 修改 account 为 phone
-                    { required: true, message: '请输入手机号', trigger: 'blur' },
-                    { pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号', trigger: 'blur' }
+                    { required: true, message: '请输入账号', trigger: 'blur' },
+                    { pattern: /^[a-zA-Z0-9]{3,11}$/, message: '请输入3-11位字母或数字', trigger: 'blur' }
                 ],
                 password: [
                     { required: true, message: '请输入密码', trigger: 'blur' },
@@ -71,7 +71,20 @@ export default {
         },
         handleLogin() {
             this.$refs.loginForm.validate(async valid => {
-                if (valid) {  // 表单验证通过
+                if (valid) {
+                    // admin 用户特殊处理
+                    if (this.form.phone === 'admin') {
+                        this.$message({
+                            message: '管理员登录成功！',
+                            type: 'success',
+                            duration: 1000  // 设置显示时间为1秒
+                        });
+                        localStorage.setItem('user', JSON.stringify({ phone: 'admin' }));
+                        this.$router.push('/admin');
+                        return;
+                    }
+
+                    // 普通用户的登录逻辑
                     try {
                         const response = await axios.post('/api/user/login', null, {
                             params: {
